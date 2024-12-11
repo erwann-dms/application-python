@@ -95,7 +95,7 @@ def tri_bulles_par_quantite():
                 products[j], products[j + 1] = products[j + 1], products[j]
     afficher_produits()
 
-def tri_rapide_par_prix():
+def tri_rapide_par_prix(products):
     if len(products) <= 1:
         return products
     pivot = products[len(products) // 2]['prix']
@@ -104,7 +104,7 @@ def tri_rapide_par_prix():
     right = [p for p in products if p['prix'] > pivot]
     return tri_rapide_par_prix(left) + middle + tri_rapide_par_prix(right)
 
-def tri_rapide_par_quantite():
+def tri_rapide_par_quantite(products):
     if len(products) <= 1:
         return products
     pivot = products[len(products) // 2]['quantite']
@@ -147,10 +147,10 @@ def menu():
         elif choix == "8":
             tri_bulles_par_quantite()
         elif choix == "9":
-            products[:] = tri_rapide_par_prix()
+            products[:] = tri_rapide_par_prix(products)
             afficher_produits()
         elif choix == "10":
-            products[:] = tri_rapide_par_quantite()
+            products[:] = tri_rapide_par_quantite(products)
             afficher_produits()
         elif choix == "11":
             rechercher_produit_binaire()
