@@ -162,26 +162,6 @@ def menu():
         else:
             print("Choix invalide.")
 
-def generer_hachage_motdepasse(mot_de_passe):
-    sel = os.urandom(16).hex()
-    mot_hache = hashlib.sha256((mot_de_passe + sel).encode()).hexdigest()
-    return f"{sel}${mot_hache}"
-
-def enregistrer_utilisateur():
-    utilisateur = input("Entrez votre nom d'utilisateur : ")
-    mot_de_passe = input("Entrez votre mot de passe : ")
-    mot_hache = generer_hachage_motdepasse(mot_de_passe)
-    
-    if os.path.exists(users_db_file):
-        with open(users_db_file, "a") as file:
-            file.write(f"{utilisateur},{mot_hache}\n")
-    else:
-        with open(users_db_file, "w") as file:
-            file.write("utilisateur,mot_hache\n")
-            file.write(f"{utilisateur},{mot_hache}\n")
-    
-    print("Utilisateur enregistré avec succès.")
-
 if __name__ == "__main__":
     charger_donnees()
     menu()
