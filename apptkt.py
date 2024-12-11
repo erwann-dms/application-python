@@ -21,7 +21,8 @@ def charger_donnees():
         print("Aucun fichier existant pour charger.")
 
 def sauvegarder_donnees():
-    with open(products_file, "a") as file:
+    with open(products_file, "w") as file:
+        file.write("nom,prix,quantite\n")
         for produit in products:
             file.write(f"{produit['nom']},{produit['prix']},{produit['quantite']}\n")
     print("Données sauvegardées dans 'produits.csv'.")
