@@ -1,8 +1,5 @@
-import pandas as pd
 import os
 import hashlib
-import tkinter as tk
-from tkinter import messagebox
 
 products = []
 users_db_file = "users.csv"
@@ -11,14 +8,22 @@ products_file = "produits.csv"
 def charger_donnees():
     global products
     if os.path.exists(products_file):
-        products = pd.read_csv(products_file).to_dict('records')
-        print("Données chargées depuis le fichier CSV.")
+        with open(products_file, "r") as file:
+            next(file)
+            for line in file:
+                nom, prix, quantite = line.strip().split(",")
+                try:
+                    products.append({"nom": nom, "prix": float(prix), "quantite": int(quantite)})
+                except ValueError:
+                    print(f"Erreur lors de la conversion des données: {line.strip()}")
+        print("Données chargées depuis le fichier.")
     else:
         print("Aucun fichier existant pour charger.")
 
 def sauvegarder_donnees():
-    df = pd.DataFrame(products)
-    df.to_csv(products_file, index=False)
+    with open(products_file, "w") as file:
+        for produit in products:
+            file.write(f"{produit['nom']},{produit['prix']},{produit['quantite']}\n")
     print("Données sauvegardées dans 'produits.csv'.")
 
 def afficher_produits():
@@ -167,12 +172,13 @@ def enregistrer_utilisateur():
     mot_hache = generer_hachage_motdepasse(mot_de_passe)
     
     if os.path.exists(users_db_file):
-        df = pd.read_csv(users_db_file)
+        with open(users_db_file, "a") as file:
+            file.write(f"{utilisateur},{mot_hache}\n")
     else:
-        df = pd.DataFrame(columns=["utilisateur", "mot_hache"])
-        
-    df = df.append({"utilisateur": utilisateur, "mot_hache": mot_hache}, ignore_index=True)
-    df.to_csv(users_db_file, index=False)
+        with open(users_db_file, "w") as file:
+            file.write("utilisateur,mot_hache\n")
+            file.write(f"{utilisateur},{mot_hache}\n")
+    
     print("Utilisateur enregistré avec succès.")
 
 if __name__ == "__main__":
